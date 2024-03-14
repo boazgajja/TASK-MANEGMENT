@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            display: block;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+        nav ul li a.active {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .container {
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 30%;
+            margin: auto;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            width: calc(50% - 12px);
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"] {
+            width: calc(50% - 12px);
+            padding: 8px;
+            margin: 5px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 200px;
+            padding: 10px 20px;
+            margin: 5px auto;
+            display: block;
+            border-radius: 3px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .tasks-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 90%;
+            margin: auto;
+        }
+
+        .task {
+            padding: 10px;
+            margin: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .task p {
+            margin: 5px 0;
+        }
+
+        .task button {
+            margin-top: 5px;
+            border-radius: 3px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .expired {
+            background-color: #f56b76 !important;
+            color: #fff !important;
+        }
+
+        .completed {
+            background-color: #39f840 !important;
+            color: #fff !important;
+        }
+
+        .delete, .update {
+            background-color: #f5a741 !important;
+            color: #000 !important;
+        }
+
+        nav {
+            font-size: 25px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            width: 60%;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1 style="width: 40%; font-size: 40px;">Task Management</h1>
+        <ul>
+            <li><a href="#" id="all" onclick="showTasks('all')" style="text-decoration: underline;">All Tasks</a></li>
+            <li><a href="#" id="upcoming" onclick="showTasks('upcoming')">Upcoming</a></li>
+            <li><a href="#" id="expired" onclick="showTasks('expired')">Missed</a></li>
+            <li><a href="#" id="completed" onclick="showTasks('completed')">Completed</a></li>
+            <li><a href="#" onclick="deleteAccount()">Delete Account</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <form id="task-form">
+            <label for="task">Task Description:</label>
+            <input type="text" id="task" placeholder="Enter task description" required>
+            <label for="date">Due Date:</label>
+            <input type="date" id="date" required>
+            <label for="time">Due Time:</label>
+            <input type="time" id="time" required>
+            <input type="hidden" id="update-index" value="-1">
+            <button onclick="addOrUpdateTask()">Add Task</button>
+        </form>
+        <div class="tasks-container" id="tasks-container"></div>
+    </div>
+    <script>
+    function addOrUpdateTask() {
+        var task = document.getElementById('task').value;
+        var date = document.getElementById('date').value;
+        var time = document.getElementById('time').value;
+    
+        if (task.trim() === '') {
+            alert('Please enter a task description.');
+            return;
+        }
+    
+        var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        var updateIndex = parseInt(document.getElementById('update-index').value);
+    
+        if (updateIndex === -1) {
+            tasks.push({ task: task, date: date, time: time, status: 'pending' });
+        } else {
+            tasks[updateIndex] = { task: task, date: date, time: time, status: 'pending' };
+            document.getElementById('update-index').value = -1;
+            document.getElementById('task-form').querySelector('button').innerText = 'Add Task';
+        }
+    
+        tasks.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        displayTasks();
+        document.getElementById('task').value = '';
+        document.getElementById('date').value = '';
+        document.getElementById('time').value = '';
+    }
+    
+    function displayTasks() {
+        var tasksContainer = document.getElementById('tasks-container');
+        tasksContainer.innerHTML = '';
+    
+        var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    
+        tasks.forEach(function(task, index) {
+            var taskElement = document.createElement('div');
+            taskElement.classList.add('task');
+            var currentTime = new Date();
+            var dueTime = new Date(task.date + ' ' + task.time);
+            if (dueTime < currentTime) {
+                taskElement.classList.add('expired');
+            }
+            if (task.status === 'completed') {
+                taskElement.classList.add('completed');
+            }
+            taskElement.innerHTML = '<p><strong>Task:</strong> ' + task.task + '</p><p><strong>Due Date:</strong> ' + task.date + '</p><p><strong>Due Time:</strong> ' + task.time + '</p><button class="delete" onclick="deleteTask(' + index + ')">Delete</button><button class="update" onclick="completeTask(' + index + ')">Completed</button><button onclick="displayUpdateForm(' + index + ')">Update</button>';
+    
+            tasksContainer.appendChild(taskElement);
+        });
+    }
+    
+    function deleteTask(index) {
+        var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.splice(index, 1);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        displayTasks();
+    }
+    
+    function completeTask(index) {
+        var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks[index].status = 'completed';
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        displayTasks();
+    }
+    
+    function displayUpdateForm(index) {
+        var task = JSON.parse(localStorage.getItem('tasks'))[index];
+        document.getElementById('task').value = task.task;
+        document.getElementById('date').value = task.date;
+        document.getElementById('time').value = task.time;
+        document.getElementById('update-index').value = index;
+        document.getElementById('task-form').querySelector('button').innerText = 'Update Task';
+    }
+    
+    function showTasks(option) {
+        var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        var filteredTasks = [];
+        
+        switch(option) {
+            case 'expired':
+                filteredTasks = tasks.filter(task => {
+                    var dueTime = new Date(task.date + ' ' + task.time);
+                    return dueTime < new Date() && task.status !== 'completed';
+                });
+                break;
+            case 'completed':
+                filteredTasks = tasks.filter(task => task.status === 'completed');
+                break;
+            case 'upcoming':
+                filteredTasks = tasks.filter(task => {
+                    var dueTime = new Date(task.date + ' ' + task.time);
+                    return dueTime >= new Date() && task.status !== 'completed';
+                });
+                break;
+            case 'all':
+                filteredTasks = tasks;
+                break;
+            default:
+                filteredTasks = tasks;
+                break;
+        }
+    
+        var tasksContainer = document.getElementById('tasks-container');
+        tasksContainer.innerHTML = '';
+    
+        filteredTasks.forEach(function(task, index) {
+            var taskElement = document.createElement('div');
+            taskElement.classList.add('task');
+            var currentTime = new Date();
+            var dueTime = new Date(task.date + ' ' + task.time);
+            if (dueTime < currentTime) {
+                taskElement.classList.add('expired');
+            }
+            if (task.status === 'completed') {
+                taskElement.classList.add('completed');
+            }
+            taskElement.innerHTML = '<p><strong>Task:</strong> ' + task.task + '</p><p><strong>Due Date:</strong> ' + task.date + '</p><p><strong>Due Time:</strong> ' + task.time + '</p><button class="delete" onclick="deleteTask(' + index + ')">Delete</button><button class="update" onclick="completeTask(' + index + ')">Completed</button><button onclick="displayUpdateForm(' + index + ')">Update</button>';
+    
+            tasksContainer.appendChild(taskElement);
+        });
+    
+        var navLinks = document.querySelectorAll('nav ul li a');
+        navLinks.forEach(function(link) {
+            link.style.textDecoration = "none";
+        });
+    
+        var clickedLink = document.getElementById(option);
+        clickedLink.style.textDecoration = "underline";
+    }
+    
+    function deleteAccount() {
+        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            localStorage.clear();
+            fetch('/delete_account', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/';
+                    } else {
+                        console.error('Failed to delete account:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error deleting account:', error));
+        }
+    }
+    
+    displayTasks();
+        </script>
+</body>
+</html>

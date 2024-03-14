@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .right-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .image-slider {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            margin-top: 20px;
+            min-height: 90vh;
+            white-space: nowrap;
+        }
+
+        .image-slider img {
+            padding: 0px;
+            display: inline-block;
+            vertical-align: top;
+            width: 90%;
+            height: 80vh;
+            position: absolute;
+            transition: transform 0.5s ease;
+        }
+
+        @keyframes slideLeft {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-33%);
+            }
+        }
+
+        .image {
+            display: block;
+            width: 33%;
+            height: 80vh;
+            position: absolute;
+            transition: transform 0.5s ease;
+        }
+
+        .image p {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1 style="font-size: 40px;">Welcome to Task Manager</h1>
+        <div class="right-buttons">
+            <a href="/login" class="button">Login</a>
+            <a href="/signup" class="button">Sign Up</a>
+        </div>
+    </div>
+    <div class="image-slider">
+        <div class="image">
+            <img src="{{ url_for('static', filename='images/image1.png') }}" alt="Image 1">
+            <p>Missed tasks</p>
+        </div>
+        <div class="image">
+            <img src="{{ url_for('static', filename='images/image2.png') }}" alt="Image 2">
+            <p>Upcoming tasks</p>
+        </div>
+        <div class="image">
+            <img src="{{ url_for('static', filename='images/image3.png') }}" alt="Image 3">
+            <p>Completed tasks</p>
+        </div>
+        <div class="image">
+            <img src="{{ url_for('static', filename='images/image4.png') }}" alt="Image 4">
+            <p>All tasks</p>
+        </div>
+    </div> 
+
+    <script>
+        var images = document.querySelectorAll('.image-slider .image');
+        var currentIndex = 0;
+
+        function showImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            images.forEach(function(img, index) {
+                var newPosition = ((index - currentIndex + images.length) % images.length) * 33.33;
+                img.style.left = newPosition + '%';
+            });
+        }
+
+        var interval = setInterval(showImage, 2000);
+    </script>
+            
+</body>
+</html>
