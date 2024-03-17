@@ -15,7 +15,7 @@ def serve_image(filename):
 def index():
     if 'username' in session:
         return redirect('/task')
-    return render_template('home.html')
+    return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
