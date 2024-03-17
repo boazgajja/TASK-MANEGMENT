@@ -9,21 +9,21 @@ first you need to signup with a user id and password it will redirect to login p
 then you can login with the login id and password
 
 
-missed task if current time and date is more than the task time then 
+<b>missed task if current time and date is more than the task time then </b>
 <img src="./static/images/image1.png">
 
-upcomming tasks if current time and date is less than the task time that is you have time to complete
+<b>upcomming tasks if current time and date is less than the task time that is you have time to complete</b>
 <img src="./static/images/image2.png">
 
-completed tasks that is if you cleck completed then it will as task.status to completed
+<b>completed tasks that is if you cleck completed then it will as task.status to completed</b>
 <img src="./static/images/image3.png">
 
-all tasks it will show all the tasks present in the website 
+<b>all tasks it will show all the tasks present in the website </b>
 <img src="./static/images/image4.png">
 
 i used local storage for this project 
 
-this is my web page apperarence 
+<b>this is my web page after login you can add task,delete update ,and mark as completed <b>
 
 <img src="./static/images/image5.png">
 
