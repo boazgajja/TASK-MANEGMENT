@@ -3,146 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Task Manager</title>
     <style>
-
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f2f2f2;
+            background-color: #f3f4f6;
+            min-height: 100vh;
         }
 
         .navbar {
-            background-color: #333;
+            background-color: #059669;
             color: #fff;
-            padding: 10px;
+            padding: 1.25rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .navbar h1 {
             margin: 0;
-            font-size: 24px;
-        }
-
-        .navbar a {
-            text-decoration: none;
-            color: #fff;
-            font-size: 18px;
-            margin-left: 10px;
-        }
-
-        .navbar a:hover {
-            text-decoration: underline;
+            font-size: 2rem;
+            font-weight: 700;
         }
 
         .right-buttons {
             display: flex;
+            gap: 1rem;
             align-items: center;
         }
 
         .button {
-            padding: 10px 20px;
-            margin-left: 10px;
-            border-radius: 5px;
-            background-color: #007bff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
             color: #fff;
             text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .button:hover {
-            background-color: #0056b3;
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
 
-        .image-slider {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            margin-top: 20px;
-            min-height: 90vh;
-            white-space: nowrap;
+        .hero-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            text-align: center;
         }
 
-        .image-slider img {
-            padding: 0px;
-            display: inline-block;
-            vertical-align: top;
-            width: 90%;
-            height: 80vh;
-            position: absolute;
-            transition: transform 0.5s ease;
+        .hero-title {
+            font-size: 3rem;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
         }
 
-        @keyframes slideLeft {
-            0% {
-                transform: translateX(0%);
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #4b5563;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            color: #059669;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
             }
-            100% {
-                transform: translateX(-33%);
+
+            .hero-title {
+                font-size: 2rem;
             }
-        }
 
-        .image {
-            display: block;
-            width: 33%;
-            height: 80vh;
-            position: absolute;
-            transition: transform 0.5s ease;
-        }
-
-        .image p {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            color: black;
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <h1 style="font-size: 40px;">Welcome to Task Manager</h1>
+        <h1>Task Manager</h1>
         <div class="right-buttons">
             <a href="/login" class="button">Login</a>
             <a href="/signup" class="button">Sign Up</a>
         </div>
     </div>
-    <div class="image-slider">
-        <div class="image">
-            <img src="{{ url_for('static', filename='images/image1.png') }}" alt="Image 1">
-            <p>Missed tasks</p>
-        </div>
-        <div class="image">
-            <img src="{{ url_for('static', filename='images/image2.png') }}" alt="Image 2">
-            <p>Upcoming tasks</p>
-        </div>
-        <div class="image">
-            <img src="{{ url_for('static', filename='images/image3.png') }}" alt="Image 3">
-            <p>Completed tasks</p>
-        </div>
-        <div class="image">
-            <img src="{{ url_for('static', filename='images/image4.png') }}" alt="Image 4">
-            <p>All tasks</p>
-        </div>
-    </div> 
 
-    <script>
-        var images = document.querySelectorAll('.image-slider .image');
-        var currentIndex = 0;
+    <div class="hero-section">
+        <h2 class="hero-title">Manage Your Tasks Efficiently</h2>
+        <p class="hero-subtitle">
+            Stay organized and boost your productivity with our intuitive task management system.
+            Track deadlines, manage priorities, and never miss important tasks again.
+        </p>
+    </div>
 
-        function showImage() {
-            currentIndex = (currentIndex + 1) % images.length;
-            images.forEach(function(img, index) {
-                var newPosition = ((index - currentIndex + images.length) % images.length) * 33.33;
-                img.style.left = newPosition + '%';
-            });
-        }
-
-        var interval = setInterval(showImage, 2000);
-    </script>
-            
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3 class="feature-title">Task Organization</h3>
+            <p class="feature-description">
+                Easily organize and categorize your tasks. Set priorities, deadlines, and track progress effortlessly.
+            </p>
+        </div>
+        <div class="feature-card">
+            <h3 class="feature-title">Smart Reminders</h3>
+            <p class="feature-description">
+                Never miss a deadline with our intelligent reminder system. Stay on top of your tasks and commitments.
+            </p>
+        </div>
+        <div class="feature-card">
+            <h3 class="feature-title">Progress Tracking</h3>
+            <p class="feature-description">
+                Monitor your productivity with detailed progress tracking. Celebrate your accomplishments as you complete tasks.
+            </p>
+        </div>
+    </div>
 </body>
 </html>
